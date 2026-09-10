@@ -23,7 +23,37 @@ public class CodeMatcher {
     }
 
     public void match() {
+        int[] secretCodeCountArr = new int[codeLength];
 
+        // Initial count array for Secret Code
+        for(int i = 0; i < codeLength; i++) {
+            secretCodeCountArr[secretCode.get(i)]++;
+        }
+
+        // Check for Correct Position matches
+        for(int i = 0; i < codeLength; i++) {
+            if(guess.get(i) == secretCode.get(i)) {
+                secretCodeCountArr[secretCode.get(i)]--;
+
+                matchResult.set(i, MatchType.CORRECT_POSITION);
+            }
+        }
+
+        // Check for Wrong Position matches
+        for(int i = 0; i < codeLength; i++) {
+            // Check only incorrect values
+            if(matchResult.get(i) != MatchType.CORRECT_POSITION) {
+                // Check if value exists in secret code - correct positions exclusive
+                if(secretCodeCountArr[guess.get(i)] > 0) {
+                    secretCodeCountArr[guess.get(i)]--;
+                    matchResult.set(i, MatchType.WRONG_POSITION);
+                }
+                else {
+                    // Value does not exist anywhere in the secret code
+                    matchResult.set(i, MatchType.NONE);
+                }
+            }
+        }
     }
 
     public MatchResult getMatchResult() {
