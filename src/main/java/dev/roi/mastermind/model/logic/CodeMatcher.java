@@ -1,4 +1,8 @@
-package dev.roi.mastermind.model;
+package dev.roi.mastermind.model.logic;
+
+import dev.roi.mastermind.model.data.Code;
+import dev.roi.mastermind.model.data.MatchResult;
+import dev.roi.mastermind.model.data.MatchType;
 
 public class CodeMatcher {
 

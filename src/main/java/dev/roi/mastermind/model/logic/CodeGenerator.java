@@ -1,4 +1,6 @@
-package dev.roi.mastermind.model;
+package dev.roi.mastermind.model.logic;
+
+import dev.roi.mastermind.model.data.Code;
 
 import java.util.Random;
 
