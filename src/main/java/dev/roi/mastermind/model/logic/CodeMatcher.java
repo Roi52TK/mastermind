@@ -9,6 +9,7 @@ public class CodeMatcher {
     private final Code secretCode;
     private final Code guess;
     private final int codeLength;
+    private final int codeOptionsCount;
     private final MatchResult matchResult;
 
     public CodeMatcher(Code secretCode, Code guess) {
@@ -23,11 +24,12 @@ public class CodeMatcher {
         this.secretCode = secretCode;
         this.guess = guess;
         this.codeLength = secretCode.getLength();
+        this.codeOptionsCount = secretCode.getOptionsCount();
         this.matchResult = new MatchResult(codeLength);
     }
 
     public void match() {
-        int[] secretCodeCountArr = new int[codeLength];
+        int[] secretCodeCountArr = new int[codeOptionsCount];
 
         // Initial count array for Secret Code
         for(int i = 0; i < codeLength; i++) {

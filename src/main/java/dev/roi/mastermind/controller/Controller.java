@@ -3,6 +3,7 @@ package dev.roi.mastermind.controller;
 import dev.roi.mastermind.common.GameActionError;
 import dev.roi.mastermind.common.GameState;
 import dev.roi.mastermind.model.data.Code;
+import dev.roi.mastermind.model.data.MatchType;
 import dev.roi.mastermind.model.game.Game;
 
 public class Controller {
@@ -17,6 +18,8 @@ public class Controller {
     public void startNewGame(int codeLength, int codeOptionsCount, int maxTries) {
         try {
             game = new Game(codeLength, codeOptionsCount, maxTries);
+            game.start();
+            gameUI.onGameStart();
         } catch (IllegalArgumentException e) {
             gameUI.onInvalidInteraction(GameActionError.INVALID_GAME_SETTINGS);
         }
@@ -40,8 +43,15 @@ public class Controller {
         }
 
         Code guessCode = new Code(game.getCodeLength(), game.getCodeOptionsCount());
-        for(int i = 0; i < guessCode.getLength(); i++) {
-            guessCode.set(i, guess[i]);
+        try {
+            for(int i = 0; i < guessCode.getLength(); i++) {
+
+                guessCode.set(i, guess[i]);
+
+            }
+        } catch (IllegalArgumentException e) {
+            gameUI.onInvalidInteraction(GameActionError.INVALID_GUESS_VALUE);
+            return;
         }
 
         game.guess(guessCode);
@@ -49,6 +59,27 @@ public class Controller {
         switch (game.getGameState()) {
             case WON -> gameUI.onGameWon();
             case LOST -> gameUI.onGameLost();
+            case ONGOING -> gameUI.onNextGuess();
         }
+    }
+
+    public int getCodeLength() {
+        return game.getCodeLength();
+    }
+
+    public int getCodeOptionsCount() {
+        return game.getCodeOptionsCount();
+    }
+
+    public int getMaxTries() {
+        return game.getMaxTries();
+    }
+
+    public int getCurrentTry() {
+        return game.getCurrentTry();
+    }
+
+    public MatchType getLastMatchResultAt(int index) {
+        return game.getLastMatchResultAt(index);
     }
 }

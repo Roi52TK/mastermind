@@ -17,6 +17,9 @@ public class Code {
     }
 
     public void set(int index, int value) {
+        if(value < 0 || value >= optionsCount)
+            throw new IllegalArgumentException("Invalid value for the code");
+
         code[index] = value;
     }
 

@@ -82,11 +82,16 @@ public class Game {
     }
 
     public boolean hasLastMatchResult() {
+        if(currentTry == 0)
+            return false;
         return matchResults[currentTry -1] != null;
     }
 
     public MatchType getLastMatchResultAt(int index) {
         if(!hasLastMatchResult())
+            return null;
+
+        if(index < 0 || index >= codeLength)
             return null;
 
         return matchResults[currentTry - 1].get(index);
@@ -113,5 +118,13 @@ public class Game {
 
     public int getCodeOptionsCount() {
         return codeOptionsCount;
+    }
+
+    public int getMaxTries() {
+        return maxTries;
+    }
+
+    public int getCurrentTry() {
+        return currentTry;
     }
 }

@@ -1,7 +1,13 @@
 package dev.roi;
 
+import dev.roi.mastermind.controller.Controller;
+import dev.roi.mastermind.view.ConsoleUI;
+
 public class Main {
     public static void main(String[] args) {
-        System.out.println("Hello world!");
+        ConsoleUI consoleUI = new ConsoleUI();
+        Controller controller = new Controller(consoleUI);
+        consoleUI.setController(controller);
+        consoleUI.run();
     }
 }
