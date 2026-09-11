@@ -1,5 +1,6 @@
 package dev.roi.mastermind.model.game;
 
+import dev.roi.mastermind.common.GameState;
 import dev.roi.mastermind.model.data.Code;
 import dev.roi.mastermind.model.data.MatchResult;
 import dev.roi.mastermind.model.data.MatchType;
@@ -14,7 +15,7 @@ public class Game {
     private int currentTry;
     private Code secretCode;
     private final MatchResult[] matchResults;
-    private boolean isGameOver;
+    private GameState gameState;
 
     public Game(int codeLength, int codeOptionsCount, int maxTries) {
 
@@ -34,18 +35,18 @@ public class Game {
         this.codeOptionsCount = codeOptionsCount;
         this.maxTries = maxTries;
         matchResults = new MatchResult[maxTries];
-        isGameOver = true;
+        gameState = GameState.NOT_STARTED;
     }
 
     public void start() {
         secretCode = CodeGenerator.randomCode(codeLength, codeOptionsCount);
         currentTry = 0;
-        isGameOver = false;
+        gameState = GameState.ONGOING;
     }
 
     public void guess(Code guess) {
 
-        if(isGameOver) {
+        if(isGameOver()) {
             return;
         }
 
@@ -72,6 +73,14 @@ public class Game {
         }
     }
 
+    public boolean isGameOver() {
+        return gameState == GameState.WON || gameState == GameState.LOST;
+    }
+
+    public GameState getGameState() {
+        return gameState;
+    }
+
     public boolean hasLastMatchResult() {
         return matchResults[currentTry -1] != null;
     }
@@ -91,10 +100,18 @@ public class Game {
     }
 
     private void endGameLoss() {
-        isGameOver = true;
+        gameState = GameState.LOST;
     }
 
     private void endGameWin() {
-        isGameOver = true;
+        gameState = GameState.WON;
+    }
+
+    public int getCodeLength() {
+        return codeLength;
+    }
+
+    public int getCodeOptionsCount() {
+        return codeOptionsCount;
     }
 }
