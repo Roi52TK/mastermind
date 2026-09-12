@@ -81,6 +81,11 @@ public class ConsoleUI implements GameUI {
         gameSettings = new GameSettings(codeLength, codeOptionsCount, maxTries);
     }
 
+    private void guess() {
+        int[] guess = scanGuess();
+        gameController.guess(guess);
+    }
+
     //TODO: handle out of range value input case
     private int[] scanGuess() {
         System.out.println("Input your guess (press enter after each value)");
@@ -116,15 +121,13 @@ public class ConsoleUI implements GameUI {
         System.out.println("Game has started!");
         System.out.println("Will you be able to crack the code?");
         ConsoleOutput.printSecretCodePattern(gameSettings.codeLength());
-        int[] guess = scanGuess();
-        gameController.guess(guess);
+        guess();
     }
 
     @Override
     public void onNextGuess() {
         printLastMatchResult();
-        int[] guess = scanGuess();
-        gameController.guess(guess);
+        guess();
     }
 
     @Override
@@ -143,6 +146,12 @@ public class ConsoleUI implements GameUI {
 
     @Override
     public void onInvalidInteraction(GameActionError error) {
-        System.out.println("ERROR: " + error);
+        switch (error) {
+            case INVALID_GUESS_VALUE -> {
+                System.out.println("ERROR: Invalid guess value! Rescanning guess.");
+                guess();
+            }
+            default -> System.out.println("ERROR: " + error);
+        }
     }
 }
