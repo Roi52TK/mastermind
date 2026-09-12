@@ -96,6 +96,7 @@ public class ConsoleUI implements GameUI {
     }
 
     private void onGameOver() {
+        System.out.println("Secret code: " + ConsoleOutput.intArrToString(gameController.getSecretCode()));
         playAgainDialog();
     }
 

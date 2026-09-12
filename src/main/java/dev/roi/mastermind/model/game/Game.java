@@ -89,6 +89,22 @@ public class Game {
         return gameState;
     }
 
+    public int[] getSecretCode() {
+        int[] secretCodeArr;
+
+        if(!isGameOver()) {
+            throw new IllegalStateException("Cannot reveal the secret code before the game has ended");
+        }
+
+        secretCodeArr = new int[gameSettings.codeLength()];
+
+        for(int i = 0; i < gameSettings.codeLength(); i++) {
+            secretCodeArr[i] = secretCode.get(i);
+        }
+
+        return secretCodeArr;
+    }
+
     public MatchType[] getMatchResult(int tryNum) {
         MatchType[] resultCopy;
 

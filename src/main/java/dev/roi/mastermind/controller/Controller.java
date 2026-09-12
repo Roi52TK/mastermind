@@ -87,4 +87,8 @@ public class Controller {
     public int[] getLastGuess() {
         return game.getLastGuess();
     }
+
+    public int[] getSecretCode() {
+        return game.getSecretCode();
+    }
 }

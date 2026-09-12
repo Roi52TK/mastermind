@@ -47,11 +47,17 @@ public class ConsoleOutput {
         System.out.println();
     }
 
-    private static void printGuess(int[] guess) {
-        System.out.print("Guess:   ");
-        for (int i : guess) {
-            System.out.print(i + " ");
+    public static String intArrToString(int[] arr) {
+        StringBuilder s = new StringBuilder();
+        for (int num : arr) {
+            s.append(num).append(" ");
         }
+
+        return s.toString();
+    }
+
+    private static void printGuess(int[] guess) {
+        System.out.print("Guess:   " + intArrToString(guess));
     }
 
     private static void printMatchResult(MatchType[] matchTypes) {
