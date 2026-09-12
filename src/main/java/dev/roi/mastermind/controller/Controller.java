@@ -83,4 +83,8 @@ public class Controller {
     public MatchType getLastMatchResultAt(int index) {
         return game.getLastMatchResultAt(index);
     }
+
+    public int[] getLastGuess() {
+        return game.getLastGuess();
+    }
 }

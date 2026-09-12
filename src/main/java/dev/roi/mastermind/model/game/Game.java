@@ -13,6 +13,7 @@ public class Game {
     private final GameSettings gameSettings;
     private int currentTry;
     private Code secretCode;
+    private final Code[] guesses;
     private final MatchResult[] matchResults;
     private GameState gameState;
 
@@ -31,6 +32,7 @@ public class Game {
         }
 
         this.gameSettings = gameSettings;
+        guesses = new Code[gameSettings.maxTries()];
         matchResults = new MatchResult[gameSettings.maxTries()];
         gameState = GameState.NOT_STARTED;
     }
@@ -63,11 +65,20 @@ public class Game {
         currentTry++;
         CodeMatcher codeMatcher = new CodeMatcher(secretCode, guess);
         codeMatcher.match();
+        guesses[currentTry - 1] = guess;
         matchResults[currentTry - 1] = codeMatcher.getMatchResult();
 
         if(matchResults[currentTry - 1].isCorrect()) {
             endGameWin();
         }
+    }
+
+    private void endGameLoss() {
+        gameState = GameState.LOST;
+    }
+
+    private void endGameWin() {
+        gameState = GameState.WON;
     }
 
     public boolean isGameOver() {
@@ -78,35 +89,37 @@ public class Game {
         return gameState;
     }
 
-    public boolean hasLastMatchResult() {
-        if(currentTry == 0)
-            return false;
-        return matchResults[currentTry -1] != null;
-    }
-
-    public MatchType getLastMatchResultAt(int index) {
-        if(!hasLastMatchResult())
+    public MatchType getMatchResultAt(int tryNum, int index) {
+        if(tryNum <= 0 || tryNum > currentTry)
             return null;
 
         if(index < 0 || index >= gameSettings.codeLength())
             return null;
 
-        return matchResults[currentTry - 1].get(index);
+        return matchResults[tryNum - 1].get(index);
     }
 
-    public boolean isLastMatchResultCorrect() {
-        if(!hasLastMatchResult())
-            return false;
-
-        return matchResults[currentTry - 1].isCorrect();
+    public MatchType getLastMatchResultAt(int index) {
+        return getMatchResultAt(currentTry, index);
     }
 
-    private void endGameLoss() {
-        gameState = GameState.LOST;
+    public int[] getGuess(int tryNum) {
+        int[] guessCopy;
+
+        if(tryNum <= 0 || tryNum > currentTry)
+            return null;
+
+        guessCopy = new int[gameSettings.codeLength()];
+
+        for(int i = 0; i < gameSettings.codeLength(); i++) {
+            guessCopy[i] = guesses[tryNum - 1].get(i);
+        }
+
+        return guessCopy;
     }
 
-    private void endGameWin() {
-        gameState = GameState.WON;
+    public int[] getLastGuess() {
+        return getGuess(currentTry);
     }
 
     public int getCodeLength() {
