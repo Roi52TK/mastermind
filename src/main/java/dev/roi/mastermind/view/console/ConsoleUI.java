@@ -88,11 +88,22 @@ public class ConsoleUI implements GameUI {
 
     //TODO: handle out of range value input case
     private int[] scanGuess() {
-        System.out.println("Input your guess (press enter after each value)");
-        System.out.println("values range [0-" + (gameController.getCodeOptionsCount() - 1) +
-                "] ------ guess " + (gameController.getCurrentTry() + 1) + "/" + gameController.getMaxTries());
+        int codeOptionsCount = gameController.getCodeOptionsCount();
 
-        return ConsoleInput.readIntArray(gameController.getCodeLength());
+        if(codeOptionsCount <= 10) {
+            System.out.println("Input your guess in one line without spaces");
+            System.out.println("values range [0-" + (gameController.getCodeOptionsCount() - 1) +
+                    "] ------ guess " + (gameController.getCurrentTry() + 1) + "/" + gameController.getMaxTries());
+
+            return ConsoleInput.readDigitArray(gameController.getCodeLength());
+        }
+        else {
+            System.out.println("Input your guess (press enter after each value)");
+            System.out.println("values range [0-" + (gameController.getCodeOptionsCount() - 1) +
+                    "] ------ guess " + (gameController.getCurrentTry() + 1) + "/" + gameController.getMaxTries());
+
+            return ConsoleInput.readIntArray(gameController.getCodeLength());
+        }
     }
 
     private void onGameOver() {
