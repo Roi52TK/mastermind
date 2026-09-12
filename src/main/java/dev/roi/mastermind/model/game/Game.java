@@ -1,5 +1,6 @@
 package dev.roi.mastermind.model.game;
 
+import dev.roi.mastermind.common.GameSettings;
 import dev.roi.mastermind.common.GameState;
 import dev.roi.mastermind.model.data.Code;
 import dev.roi.mastermind.model.data.MatchResult;
@@ -9,37 +10,33 @@ import dev.roi.mastermind.model.logic.CodeMatcher;
 
 public class Game {
 
-    private final int codeLength;
-    private final int codeOptionsCount;
-    private final int maxTries;
+    private final GameSettings gameSettings;
     private int currentTry;
     private Code secretCode;
     private final MatchResult[] matchResults;
     private GameState gameState;
 
-    public Game(int codeLength, int codeOptionsCount, int maxTries) {
+    public Game(GameSettings gameSettings) {
 
-        if(codeLength <= 0) {
+        if(gameSettings.codeLength() <= 0) {
             throw new IllegalArgumentException("Secret Code length must be at least 1");
         }
 
-        if(codeOptionsCount <= 0) {
+        if(gameSettings.codeOptionsCount() <= 0) {
             throw new IllegalArgumentException("Secret code options count must be at least 1");
         }
 
-        if(maxTries <= 0) {
+        if(gameSettings.maxTries() <= 0) {
             throw new IllegalArgumentException("Max tries must be at least 1");
         }
 
-        this.codeLength = codeLength;
-        this.codeOptionsCount = codeOptionsCount;
-        this.maxTries = maxTries;
-        matchResults = new MatchResult[maxTries];
+        this.gameSettings = gameSettings;
+        matchResults = new MatchResult[gameSettings.maxTries()];
         gameState = GameState.NOT_STARTED;
     }
 
     public void start() {
-        secretCode = CodeGenerator.randomCode(codeLength, codeOptionsCount);
+        secretCode = CodeGenerator.randomCode(gameSettings.codeLength(), gameSettings.codeOptionsCount());
         currentTry = 0;
         gameState = GameState.ONGOING;
     }
@@ -50,16 +47,16 @@ public class Game {
             return;
         }
 
-        if(currentTry >= maxTries) {
+        if(currentTry >= gameSettings.maxTries()) {
             endGameLoss();
             return;
         }
 
-        if(guess.getLength() != codeLength) {
+        if(guess.getLength() != gameSettings.codeLength()) {
             throw new IllegalArgumentException("Guess must have the same length of the Secret Code");
         }
 
-        if(guess.getOptionsCount() != codeOptionsCount) {
+        if(guess.getOptionsCount() != gameSettings.codeOptionsCount()) {
             throw new IllegalArgumentException("Guess must have the same number of options of the Secret Code");
         }
 
@@ -91,7 +88,7 @@ public class Game {
         if(!hasLastMatchResult())
             return null;
 
-        if(index < 0 || index >= codeLength)
+        if(index < 0 || index >= gameSettings.codeLength())
             return null;
 
         return matchResults[currentTry - 1].get(index);
@@ -113,15 +110,15 @@ public class Game {
     }
 
     public int getCodeLength() {
-        return codeLength;
+        return gameSettings.codeLength();
     }
 
     public int getCodeOptionsCount() {
-        return codeOptionsCount;
+        return gameSettings.codeOptionsCount();
     }
 
     public int getMaxTries() {
-        return maxTries;
+        return gameSettings.maxTries();
     }
 
     public int getCurrentTry() {

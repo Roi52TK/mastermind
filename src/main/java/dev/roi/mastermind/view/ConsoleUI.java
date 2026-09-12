@@ -1,6 +1,8 @@
 package dev.roi.mastermind.view;
 
+import dev.roi.mastermind.common.Difficulty;
 import dev.roi.mastermind.common.GameActionError;
+import dev.roi.mastermind.common.GameSettings;
 import dev.roi.mastermind.controller.Controller;
 import dev.roi.mastermind.controller.GameUI;
 
@@ -20,11 +22,55 @@ public class ConsoleUI implements GameUI {
     }
 
     private void initGameSettings() {
+        int choice = -1;
+        Difficulty difficulty = null;
+        System.out.println("Choose difficulty");
+        System.out.println("""
+                0 = Custom
+                1 = Easy
+                2 = Medium
+                3 = Hard""");
+
+        try {
+            choice = SCANNER.nextInt();
+        } catch (Exception e) {
+            SCANNER.next();
+            System.out.println("Invalid input! Reinitializing game settings...\n");
+            initGameSettings();
+            return;
+        }
+
+        if(choice == 0) {
+            initCustomGameSettings();
+            return;
+        }
+
+        switch (choice) {
+            case 1:
+                difficulty = Difficulty.EASY;
+                break;
+            case 2:
+                difficulty = Difficulty.MEDIUM;
+                break;
+            case 3:
+                difficulty = Difficulty.HARD;
+                break;
+            default:
+                System.out.println("Invalid answer! Reinitializing game settings...\n");
+                initGameSettings();
+                break;
+        }
+
+        assert difficulty != null;
+        gameController.startNewGame(difficulty.getGameSettings());
+    }
+
+    private void initCustomGameSettings() {
         int codeLength = 1;
         int codeOptionsCount = 1;
         int maxTries = 1;
 
-        System.out.println("~~~~Input game settings~~~~");
+        System.out.println("~~~~Input custom game settings~~~~");
 
         try {
             System.out.print("Enter code length: ");
@@ -34,11 +80,13 @@ public class ConsoleUI implements GameUI {
             System.out.print("Enter max tries: ");
             maxTries = SCANNER.nextInt();
         } catch (Exception e) {
+            SCANNER.next();
             System.out.println("Invalid input! Restarting initialization...");
-            initGameSettings();
+            initCustomGameSettings();
+            return;
         }
 
-        gameController.startNewGame(codeLength, codeOptionsCount, maxTries);
+        gameController.startNewGame(new GameSettings(codeLength, codeOptionsCount, maxTries));
     }
 
     private void printSecretCodePattern() {

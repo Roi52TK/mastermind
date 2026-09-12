@@ -1,6 +1,7 @@
 package dev.roi.mastermind.controller;
 
 import dev.roi.mastermind.common.GameActionError;
+import dev.roi.mastermind.common.GameSettings;
 import dev.roi.mastermind.common.GameState;
 import dev.roi.mastermind.model.data.Code;
 import dev.roi.mastermind.model.data.MatchType;
@@ -15,9 +16,9 @@ public class Controller {
         this.gameUI = gameUI;
     }
 
-    public void startNewGame(int codeLength, int codeOptionsCount, int maxTries) {
+    public void startNewGame(GameSettings gameSettings) {
         try {
-            game = new Game(codeLength, codeOptionsCount, maxTries);
+            game = new Game(gameSettings);
             game.start();
             gameUI.onGameStart();
         } catch (IllegalArgumentException e) {
