@@ -1,4 +1,4 @@
-package dev.roi.mastermind.model.data;
+package dev.roi.mastermind.common;
 
 public enum MatchType {
     NONE,

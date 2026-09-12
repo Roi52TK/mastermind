@@ -1,5 +1,7 @@
 package dev.roi.mastermind.model.data;
 
+import dev.roi.mastermind.common.MatchType;
+
 public class MatchResult {
 
     private final MatchType[] result;

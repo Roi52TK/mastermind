@@ -1,7 +1,7 @@
 package dev.roi;
 
 import dev.roi.mastermind.controller.Controller;
-import dev.roi.mastermind.view.ConsoleUI;
+import dev.roi.mastermind.view.console.ConsoleUI;
 
 public class Main {
     public static void main(String[] args) {

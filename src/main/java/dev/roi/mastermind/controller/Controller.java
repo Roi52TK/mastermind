@@ -4,7 +4,7 @@ import dev.roi.mastermind.common.GameActionError;
 import dev.roi.mastermind.common.GameSettings;
 import dev.roi.mastermind.common.GameState;
 import dev.roi.mastermind.model.data.Code;
-import dev.roi.mastermind.model.data.MatchType;
+import dev.roi.mastermind.common.MatchType;
 import dev.roi.mastermind.model.game.Game;
 
 public class Controller {
@@ -80,8 +80,8 @@ public class Controller {
         return game.getCurrentTry();
     }
 
-    public MatchType getLastMatchResultAt(int index) {
-        return game.getLastMatchResultAt(index);
+    public MatchType[] getLastMatchResult() {
+        return game.getLastMatchResult();
     }
 
     public int[] getLastGuess() {

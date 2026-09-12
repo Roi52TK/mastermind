@@ -2,7 +2,7 @@ package dev.roi.mastermind.model.logic;
 
 import dev.roi.mastermind.model.data.Code;
 import dev.roi.mastermind.model.data.MatchResult;
-import dev.roi.mastermind.model.data.MatchType;
+import dev.roi.mastermind.common.MatchType;
 
 public class CodeMatcher {
 

@@ -4,7 +4,7 @@ import dev.roi.mastermind.common.GameSettings;
 import dev.roi.mastermind.common.GameState;
 import dev.roi.mastermind.model.data.Code;
 import dev.roi.mastermind.model.data.MatchResult;
-import dev.roi.mastermind.model.data.MatchType;
+import dev.roi.mastermind.common.MatchType;
 import dev.roi.mastermind.model.logic.CodeGenerator;
 import dev.roi.mastermind.model.logic.CodeMatcher;
 
@@ -89,18 +89,23 @@ public class Game {
         return gameState;
     }
 
-    public MatchType getMatchResultAt(int tryNum, int index) {
+    public MatchType[] getMatchResult(int tryNum) {
+        MatchType[] resultCopy;
+
         if(tryNum <= 0 || tryNum > currentTry)
             return null;
 
-        if(index < 0 || index >= gameSettings.codeLength())
-            return null;
+        resultCopy = new MatchType[gameSettings.codeLength()];
 
-        return matchResults[tryNum - 1].get(index);
+        for(int i = 0; i < gameSettings.codeLength(); i++) {
+            resultCopy[i] = matchResults[tryNum - 1].get(i);
+        }
+
+        return resultCopy;
     }
 
-    public MatchType getLastMatchResultAt(int index) {
-        return getMatchResultAt(currentTry, index);
+    public MatchType[] getLastMatchResult() {
+        return getMatchResult(currentTry);
     }
 
     public int[] getGuess(int tryNum) {
