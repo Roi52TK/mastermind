@@ -50,7 +50,6 @@ public class Game {
         }
 
         if(currentTry >= gameSettings.maxTries()) {
-            endGameLoss();
             return;
         }
 
@@ -70,6 +69,10 @@ public class Game {
 
         if(matchResults[currentTry - 1].isCorrect()) {
             endGameWin();
+        }
+        // Check if last guess is wrong
+        else if(currentTry == gameSettings.maxTries()) {
+            endGameLoss();
         }
     }
 
