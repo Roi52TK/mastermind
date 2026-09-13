@@ -22,22 +22,22 @@ public class ConsoleUI implements GameUI {
 
     private void startGame() {
         initGameSettings();
-        ConsoleOutput.printGameSettings(gameSettings);
-        ConsoleOutput.printGameInstructions();
         gameController.startNewGame(gameSettings);
     }
 
     private void initGameSettings() {
         int choice;
         Difficulty difficulty;
-        System.out.println("Choose difficulty");
         System.out.println("""
-                0 = Custom
-                1 = Easy
-                2 = Medium
-                3 = Hard""");
+                ~~~~~~~ Choose difficulty ~~~~~~~
+                            0 = Custom
+                            1 = Easy
+                            2 = Medium
+                            3 = Hard
+                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~""");
 
         while(true) {
+            System.out.print("Enter 0/1/2/3: ");
             choice = ConsoleInput.readInt();
 
             switch (choice) {
@@ -78,6 +78,8 @@ public class ConsoleUI implements GameUI {
         System.out.print("Enter max tries: ");
         maxTries = ConsoleInput.readInt();
 
+        System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+
         gameSettings = new GameSettings(codeLength, codeOptionsCount, maxTries);
     }
 
@@ -86,7 +88,6 @@ public class ConsoleUI implements GameUI {
         gameController.guess(guess);
     }
 
-    //TODO: handle out of range value input case
     private int[] scanGuess() {
         int codeOptionsCount = gameController.getCodeOptionsCount();
 
@@ -130,8 +131,13 @@ public class ConsoleUI implements GameUI {
 
     @Override
     public void onGameStart() {
-        System.out.println("Game has started!");
-        System.out.println("Will you be able to crack the code?");
+        System.out.println();
+        ConsoleOutput.printGameSettings(gameSettings);
+        ConsoleOutput.printGameInstructions();
+        System.out.print("""
+                        Game has started!
+                Will you be able to crack the code?
+                """);
         ConsoleOutput.printSecretCodePattern(gameSettings.codeLength());
         guess();
     }

@@ -14,11 +14,11 @@ public class ConsoleOutput {
     public static void printGameSettings(GameSettings gameSettings) {
         System.out.printf(
                 """
-                        ~~~~ Game Settings ~~~~
-                        Code length: %d
-                        Options: 0-%d
-                        Max tries: %d
-                        ~~~~~~~~~~~~~~~~~~~~~~
+                        --------- Game Settings ---------
+                                Code length: %d
+                                Options: 0-%d
+                                Max tries: %d
+                        ---------------------------------
                         """, gameSettings.codeLength(),
                 gameSettings.codeOptionsCount() - 1,
                 gameSettings.maxTries()
@@ -27,10 +27,11 @@ public class ConsoleOutput {
 
     public static void printGameInstructions() {
         System.out.println("""
-                V = Correct position
-                O = Wrong position
-                X = Not in code
-                ~~~~~~~~~~~~~~~~~~~~~~
+                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                        V = Correct position
+                        O = Wrong position
+                        X = Not in code
+                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                 """);
     }
 

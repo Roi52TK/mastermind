@@ -18,7 +18,6 @@ public class Game {
     private GameState gameState;
 
     public Game(GameSettings gameSettings) {
-
         if(gameSettings.codeLength() <= 0) {
             throw new IllegalArgumentException("Secret Code length must be at least 1");
         }
