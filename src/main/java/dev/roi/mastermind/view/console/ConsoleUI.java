@@ -7,22 +7,28 @@ import dev.roi.mastermind.controller.Controller;
 import dev.roi.mastermind.controller.GameUI;
 
 public class ConsoleUI implements GameUI {
-    private Controller gameController;
+    private Controller controller;
 
     private GameSettings gameSettings;
 
     public void setController(Controller controller) {
-        this.gameController = controller;
+        this.controller = controller;
     }
 
     public void run() {
         System.out.println("Starting Console UI for Mastermind game...");
-        startGame();
+        startNewGame();
     }
 
-    private void startGame() {
+    private void startNewGame() {
+        System.out.println("Starting new game!");
         initGameSettings();
-        gameController.startNewGame(gameSettings);
+        controller.startNewGame(gameSettings);
+    }
+
+    private void restartGame() {
+        System.out.println("Restarting game!");
+        controller.startNewGame(gameSettings);
     }
 
     private void initGameSettings() {
@@ -85,48 +91,62 @@ public class ConsoleUI implements GameUI {
 
     private void guess() {
         int[] guess = scanGuess();
-        gameController.guess(guess);
+        controller.guess(guess);
     }
 
     private int[] scanGuess() {
-        int codeOptionsCount = gameController.getCodeOptionsCount();
+        int codeOptionsCount = controller.getCodeOptionsCount();
 
         if(codeOptionsCount <= 10) {
             System.out.println("Input your guess in one line without spaces");
-            System.out.println("values range [0-" + (gameController.getCodeOptionsCount() - 1) +
-                    "] ------ guess " + (gameController.getCurrentTry() + 1) + "/" + gameController.getMaxTries());
+            System.out.println("values range [0-" + (controller.getCodeOptionsCount() - 1) +
+                    "] ------ guess " + (controller.getCurrentTry() + 1) + "/" + controller.getMaxTries());
 
-            return ConsoleInput.readDigitArray(gameController.getCodeLength());
+            return ConsoleInput.readDigitArray(controller.getCodeLength());
         }
         else {
             System.out.println("Input your guess (press enter after each value)");
-            System.out.println("values range [0-" + (gameController.getCodeOptionsCount() - 1) +
-                    "] ------ guess " + (gameController.getCurrentTry() + 1) + "/" + gameController.getMaxTries());
+            System.out.println("values range [0-" + (controller.getCodeOptionsCount() - 1) +
+                    "] ------ guess " + (controller.getCurrentTry() + 1) + "/" + controller.getMaxTries());
 
-            return ConsoleInput.readIntArray(gameController.getCodeLength());
+            return ConsoleInput.readIntArray(controller.getCodeLength());
         }
     }
 
     private void onGameOver() {
-        System.out.println("Secret code: " + ConsoleOutput.intArrToString(gameController.getSecretCode()));
+        System.out.println("Secret code: " + ConsoleOutput.intArrToString(controller.getSecretCode()));
         playAgainDialog();
     }
 
     private void playAgainDialog() {
-        boolean playAgain;
+        boolean isPlayAgain;
         System.out.print("\nPlay again? (Y/N): ");
-        playAgain = ConsoleInput.readYesNo();
+        isPlayAgain = ConsoleInput.readYesNo();
 
-        if(playAgain) {
-            startGame();
+        if(isPlayAgain) {
+            playAgain();
         }
         else {
             System.out.println("\nExiting...");
         }
     }
 
+    private void playAgain() {
+        boolean isSameSettings;
+        System.out.println("Playing again!");
+        System.out.print("Same settings? (Y/N): ");
+        isSameSettings = ConsoleInput.readYesNo();
+
+        if(isSameSettings) {
+            restartGame();
+        }
+        else {
+            startNewGame();
+        }
+    }
+
     private void printLastMatchResult() {
-        ConsoleOutput.printMatchResult(gameController.getLastGuess(), gameController.getLastMatchResult());
+        ConsoleOutput.printMatchResult(controller.getLastGuess(), controller.getLastMatchResult());
     }
 
     @Override
@@ -166,8 +186,12 @@ public class ConsoleUI implements GameUI {
     public void onInvalidInteraction(GameActionError error) {
         switch (error) {
             case INVALID_GUESS_VALUE -> {
-                System.out.println("ERROR: Invalid guess value! Rescanning guess.");
+                System.out.println("ERROR: Invalid guess value! Rescanning guess...");
                 guess();
+            }
+            case INVALID_GAME_SETTINGS -> {
+                System.out.println("ERROR: Invalid game settings! Restarting game...");
+                startNewGame();
             }
             default -> System.out.println("ERROR: " + error);
         }
